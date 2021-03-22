@@ -2,6 +2,8 @@ from flask import Flask, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user
 from werkzeug.utils import redirect
 
+from flask_restful import  abort, Api
+from api import news_resource
 from data import db_session
 from data.news import News
 from data.users import User
@@ -10,8 +12,15 @@ from forms.register import RegisterForm
 from forms.login import LoginForm
 
 app = Flask(__name__)
+api = Api(app)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+# для списка объектов
+api.add_resource(news_resource.NewsListResource, '/api/v2/news')
+# для одного объекта
+api.add_resource(news_resource.NewsResource, '/api/v2/news/<int:news_id>')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -70,6 +79,12 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+def abort_if_news_not_found(news_id):
+    session = db_session.create_session()
+    news = session.query(News).get(news_id)
+    if not news:
+        abort(404, message=f"News {news_id} not found")
 
 def main():
     db_session.global_init("db/blogs.sqlite")
