@@ -4,13 +4,14 @@ from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
 
+
 class Comments(SqlAlchemyBase):
     __tablename__ = 'comments'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"),
-                                    nullable=True)
+                                  nullable=True)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     connected_to_id = sqlalchemy.Column(sqlalchemy.Integer)
     object_name = sqlalchemy.Column(sqlalchemy.String)
