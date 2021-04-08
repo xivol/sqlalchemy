@@ -4,7 +4,7 @@ from werkzeug.utils import redirect
 
 from flask_restful import  abort, Api
 from api import news_resource
-from data import db_session
+from data import db_session, api
 from data.news import News
 from data.users import User
 
@@ -86,8 +86,15 @@ def abort_if_news_not_found(news_id):
     if not news:
         abort(404, message=f"News {news_id} not found")
 
+
+from flask import make_response,jsonify
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
 def main():
-    db_session.global_init("db/blogs.sqlite")
+    db_session.global_init("db/comments.sqlite")
 
     db_sess = db_session.create_session()
     for user in db_sess.query(User).all():
@@ -96,6 +103,8 @@ def main():
 
     for user in users:
         print(user)
+
+    #app.register_blueprint(api.blueprint)
     app.run()
 
 if __name__ == '__main__':
