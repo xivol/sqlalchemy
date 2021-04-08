@@ -14,7 +14,7 @@ class Comments(SqlAlchemyBase):
                                   nullable=True)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     connected_to_id = sqlalchemy.Column(sqlalchemy.Integer)
-    object_name = sqlalchemy.Column(sqlalchemy.String)
+    table_name = sqlalchemy.Column(sqlalchemy.String)
     likes_count = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     data = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     empty = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
