@@ -5,7 +5,6 @@ from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 
 
-
 class Comments(SqlAlchemyBase):
     __tablename__ = 'comments'
 
@@ -17,5 +16,6 @@ class Comments(SqlAlchemyBase):
     connected_to_id = sqlalchemy.Column(sqlalchemy.Integer)
     table_name = sqlalchemy.Column(sqlalchemy.String)
     likes_count = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
-    data = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
+    date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     empty = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
+    user = orm.relation('User')
