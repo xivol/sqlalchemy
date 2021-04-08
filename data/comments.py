@@ -13,7 +13,6 @@ class Comments(SqlAlchemyBase):
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"),
                                   nullable=True)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    connected_to_id = sqlalchemy.Column(sqlalchemy.Integer)
     table_name = sqlalchemy.Column(sqlalchemy.String)
     likes_count = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     data = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
