@@ -7,6 +7,7 @@ from api import news_resource
 from data import db_session, api
 from data.news import News
 from data.users import User
+from data.comments import Comments
 
 from forms.register import RegisterForm
 from forms.login import LoginForm
@@ -34,6 +35,12 @@ def index():
     db_sess = db_session.create_session()
     news = db_sess.query(News).filter(News.is_private != True)
     return render_template("index.html", news=news, title="Записи в блоге")
+
+@app.route("/comments")
+def comments():
+    db_sess = db_session.create_session()
+    data = db_sess.query(Comments)
+    return render_template("comments.html", comments=data, title="Комментарии")
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
