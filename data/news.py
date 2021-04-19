@@ -19,4 +19,5 @@ class News(SqlAlchemyBase):
 
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
+    news_img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user = orm.relation('User')
