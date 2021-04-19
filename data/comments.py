@@ -18,4 +18,4 @@ class Comments(SqlAlchemyBase):
     likes_count = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     empty = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
-    user = orm.relation('User')
+    author = orm.relation('User')

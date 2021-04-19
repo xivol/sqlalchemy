@@ -21,3 +21,9 @@ class News(SqlAlchemyBase, SerializerMixin):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')
+
+    def __init__(self, title, content, image, user_id):
+        self.title = title
+        self.content = content
+        self.image = image
+        self.user_id = user_id
