@@ -124,7 +124,7 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 def main():
-    db_session.global_init("db/comments.sqlite")
+    db_session.global_init("db/website.sqlite")
 
     db_sess = db_session.create_session()
     db_sess.add(News('Test', 'Text', '', 1))
