@@ -14,9 +14,8 @@ class Product(SqlAlchemyBase):
     photo_2 = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     photo_3 = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     descript = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    price = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     categories = orm.relation("ProductCategories", back_populates="product")
-
-
