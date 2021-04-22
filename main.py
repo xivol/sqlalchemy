@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
 
-from flask_restful import  abort, Api
+from flask_restful import abort, Api
 from api import news_resource
 from data import db_session, api
 from data.news import News
