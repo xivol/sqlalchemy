@@ -74,6 +74,15 @@ def news_item(id):
 
     return render_template("news_item.html", news=data, title=data.title, comments=comments, form=form)
 
+@app.route("/products/<int:id>", methods=['GET', 'POST'])
+def product_item(id):
+    db_sess = db_session.create_session()
+    data = db_sess.query(Product).get(id)
+    # comments = db_sess.query(Comments).filter(Comments.connected_to_id == id,
+    #                                           Comments.table_name == News.__tablename__)
+
+    return render_template("product.item.html", item=data, title=data.title)
+
 
 @app.route("/order")
 def order():
