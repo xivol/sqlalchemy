@@ -72,6 +72,14 @@ def news_item(id):
 
     return render_template("news_item.html", news=data, title=data.title, comments=comments, form=form)
 
+
+@app.route("/order")
+def order():
+    db_sess = db_session.create_session()
+    data_orders = db_sess.query(Order)
+    return render_template("order.html", news=data_orders, title="Заказы")
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
@@ -111,11 +119,13 @@ def login():
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
+
 
 def abort_if_news_not_found(news_id):
     session = db_session.create_session()
@@ -124,14 +134,16 @@ def abort_if_news_not_found(news_id):
         abort(404, message=f"News {news_id} not found")
 
 
-from flask import make_response,jsonify
+from flask import make_response, jsonify
+
 
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+
 def main():
-    db_session.global_init("db/website.sqlite")
+    db_session.global_init("db/comments.sqlite")
 
     db_sess = db_session.create_session()
     db_sess.add(News('Test', 'Text', '', 1))
@@ -145,9 +157,9 @@ def main():
     for user in users:
         print(user)
 
-    #app.register_blueprint(api.blueprint)
+    # app.register_blueprint(api.blueprint)
     app.run()
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     main()
