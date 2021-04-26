@@ -6,6 +6,7 @@ from werkzeug.utils import redirect
 from api import news_resource
 from data import db_session, api
 from data.news import News
+from data.order import Order
 from data.product import Product
 from data.users import User
 from data.comments import Comments

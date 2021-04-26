@@ -21,7 +21,7 @@ class Product(SqlAlchemyBase):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
 
-    categories = orm.relation("ProductCategories", back_populates="product")
+   # categories = orm.relation("ProductCategories", back_populates="product")
 
     def __init__(self, title, descr, price):
         self.title = title
