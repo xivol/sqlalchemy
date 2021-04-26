@@ -11,7 +11,6 @@ class Order(SqlAlchemyBase, SerializerMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    image = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
 
@@ -20,8 +19,3 @@ class Order(SqlAlchemyBase, SerializerMixin):
 
     user = orm.relation('User')
 
-    def __init__(self, title, content, image, user_id):
-        self.title = title
-        self.content = content
-        self.image = image
-        self.user_id = user_id

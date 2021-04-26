@@ -19,7 +19,8 @@
          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   <!-- Custom styles for this template -->
-  <link href="static/css/shop-homepage.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/shop-homepage.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/comments.css') }}" rel="stylesheet" />
 
 </head>
 
@@ -36,7 +37,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home
+            <a class="nav-link" href="/">Главная
               <span class="sr-only">(current)</span>
             </a>
           </li>
@@ -44,15 +45,15 @@
             <a class="nav-link" href="/news">Новости</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/order">Заказы</a>
+            <a class="nav-link" href="/products">Каталог</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="#">Контакты</a>
           </li>
           {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="/order">Мои Заказы</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link danger" href="/logout">{{ current_user.name }}</a>
           </li>
