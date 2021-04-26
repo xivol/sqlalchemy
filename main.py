@@ -60,6 +60,7 @@ def news_item(id):
             comm.author_id = current_user.id
             comm.text = form.text.data
             comm.date = datetime.datetime.now()
+            comm.likes_count = 0
             db_sess.add(comm)
             db_sess.commit()
     else:
