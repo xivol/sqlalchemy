@@ -16,6 +16,7 @@ class Product(SqlAlchemyBase):
     descript = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     price = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    rating = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     categories = orm.relation("ProductCategories", back_populates="product")
