@@ -6,7 +6,7 @@ from .db_session import SqlAlchemyBase
 
 
 class Comments(SqlAlchemyBase):
-    __tablename__ = 'comments'
+    __tablename__ = 'comments.css'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
@@ -18,4 +18,4 @@ class Comments(SqlAlchemyBase):
     likes_count = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     empty = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
-    user = orm.relation('User')
+    author = orm.relation('User')

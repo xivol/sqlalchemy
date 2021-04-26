@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+
+      <div class="col-lg-3">
+
+        <h1 class="my-4">Shop Name</h1>
+        <div class="list-group">
+          <a href="#" class="list-group-item">Category 1</a>
+          <a href="#" class="list-group-item">Category 2</a>
+          <a href="#" class="list-group-item">Category 3</a>
+        </div>
+
+      </div>
+      <!-- /.col-lg-3 -->
+
+      <div class="col-lg-9">
+          <div class="row">
+          {% for item in news %}
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <a href="./news/{{item.id}}"><img class="card-img-top" src="{{item.image}}" alt=""></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="./news/{{item.id}}">{{item.title}}</a>
+                </h4>
+                <p class="card-text">{{item.content}}</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">{{item.created_date}}</small>
+              </div>
+            </div>
+          </div>
+          {%endfor%}
+          </div>
+      </div>
+</div>
+{% endblock %}
