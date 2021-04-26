@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
-
-from flask_restful import  abort, Api
+import datetime
+from flask_restful import abort, Api
 from api import news_resource
 from data import db_session, api
 from data.news import News
@@ -24,12 +24,15 @@ api.add_resource(news_resource.NewsListResource, '/api/v2/news')
 # для одного объекта
 api.add_resource(news_resource.NewsResource, '/api/v2/news/<int:news_id>')
 
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
+
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
 
 @app.route("/")
 def index():
@@ -37,11 +40,13 @@ def index():
     news = db_sess.query(News).filter(News.is_private != True)
     return render_template("index.html", news=news, title="Записи в блоге")
 
+
 @app.route("/news")
 def news():
     db_sess = db_session.create_session()
     data = db_sess.query(News)
     return render_template("news.html", news=data, title="Новости")
+
 
 @app.route("/news/<int:id>", methods=['GET', 'POST'])
 def news_item(id):
@@ -54,6 +59,7 @@ def news_item(id):
             comm.table_name = News.__tablename__
             comm.author_id = current_user.id
             comm.text = form.text.data
+            comm.date = datetime.datetime.now()
             db_sess.add(comm)
             db_sess.commit()
     else:
@@ -64,6 +70,7 @@ def news_item(id):
                                               Comments.table_name == News.__tablename__)
 
     return render_template("news_item.html", news=data, title=data.title, comments=comments, form=form)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
@@ -104,11 +111,13 @@ def login():
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
+
 
 def abort_if_news_not_found(news_id):
     session = db_session.create_session()
@@ -117,11 +126,13 @@ def abort_if_news_not_found(news_id):
         abort(404, message=f"News {news_id} not found")
 
 
-from flask import make_response,jsonify
+from flask import make_response, jsonify
+
 
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
+
 
 def main():
     db_session.global_init("db/website.sqlite")
@@ -136,9 +147,9 @@ def main():
     for user in users:
         print(user)
 
-    #app.register_blueprint(api.blueprint)
+    # app.register_blueprint(api.blueprint)
     app.run()
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     main()
