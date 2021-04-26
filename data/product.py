@@ -22,3 +22,8 @@ class Product(SqlAlchemyBase):
                                      default=datetime.datetime.now)
 
     categories = orm.relation("ProductCategories", back_populates="product")
+
+    def __init__(self, title, descr, price):
+        self.title = title
+        self.descript = descr
+        self.price = price

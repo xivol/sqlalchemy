@@ -6,6 +6,7 @@ from werkzeug.utils import redirect
 from api import news_resource
 from data import db_session, api
 from data.news import News
+from data.product import Product
 from data.users import User
 from data.comments import Comments
 from forms.comment import CommentForm
@@ -42,6 +43,12 @@ def news():
     db_sess = db_session.create_session()
     data = db_sess.query(News)
     return render_template("news.html", news=data, title="Новости")
+
+@app.route("/products")
+def product():
+    db_sess = db_session.create_session()
+    data = db_sess.query(Product)
+    return render_template("product.html", products=data, title="Товары")
 
 @app.route("/news/<int:id>", methods=['GET', 'POST'])
 def news_item(id):
@@ -128,6 +135,8 @@ def main():
 
     db_sess = db_session.create_session()
     db_sess.add(News('Test', 'Text', '', 1))
+    db_sess.commit()
+    db_sess.add(Product('Test', 'Text', 1))
     db_sess.commit()
     for user in db_sess.query(User).all():
         print(user)
