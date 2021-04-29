@@ -73,6 +73,17 @@ def news_item(id):
     return render_template("news_item.html", news=data, title=data.title, comments=comments, form=form)
 
 
+@app.route("/comment_like/<int:id>", methods=['POST'])
+def add_like(id):
+    print('////')
+    db_sess = db_session.create_session()
+    comment = db_sess.query(Comments).get(id)
+    comment.likes_count += 1
+    db_sess.commit()
+
+    return make_response(str(comment.likes_count))
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()

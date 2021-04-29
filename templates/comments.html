@@ -1,4 +1,20 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/comments.css') }}"/>
+<script>
+    function like(id) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+           if (this.readyState == 4 && this.status == 200) {
+             document.getElementById("likes"+id).innerHTML =
+                this.responseText;
+           }
+        };
+        xhttp.open('POST', 'http://127.0.0.1:5000/comment_like/'+id, true);
+        xhttp.send();
+
+    }
+
+
+</script>
 <section class="content-item" id="comments">
     <div class="container">
        <div class="row">
@@ -16,12 +32,11 @@
                         <p>{{comment.text}}</p>
                         <ul class="list-unstyled list-inline media-detail pull-left">
                             <li><i class="fa fa-calendar"></i>{{comment.date_str()}}</li>
-                            <li><i class="fa fa-thumbs-up"></i>{{comment.likes_count}}</li>
+                            <li id="likes{{comment.id}}"><i class="fa fa-thumbs-up"></i>{{comment.likes_count}}</li>
                         </ul>
-                        <ul class="list-unstyled list-inline media-detail pull-right">
-                            <li class=""><a href="">Like</a></li>
-                            <!-- <li class=""><a href="">Reply</a></li> -->
-                        </ul>
+                        <button onclick="like({{comment.id}})
+                        ">like</button>
+
                     </div>
                 </div>
                 <!-- COMMENT - END -->
