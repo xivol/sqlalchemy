@@ -1,11 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, Blueprint, send_from_directory
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import abort
 from werkzeug.utils import redirect
 
-#from flask_restful import  abort, Api
-from api import news_resource
-from data import db_session, api
+from admin import admin
+from data import db_session
+from data.categories import Categories
 from data.news import News
 from data.order import Order
 from data.product import Product
@@ -17,7 +17,7 @@ from forms.register import RegisterForm
 from forms.login import LoginForm
 
 app = Flask(__name__)
-#api = Api(app)
+app.register_blueprint(admin)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -46,11 +46,35 @@ def news():
     data = db_sess.query(News)
     return render_template("news.html", news=data, title="Новости")
 
-@app.route("/products")
+@app.route('/products')
 def product():
+    category = request.args.get("category", None)
     db_sess = db_session.create_session()
-    data = db_sess.query(Product)
-    return render_template("product.html", products=data, title="Товары")
+    cat = db_sess.query(Categories)
+    if not category:
+        data = db_sess.query(Product)
+        return render_template("product.html",
+                               products=data,
+                               categories=cat,
+                               title="Товары")
+    else:
+        data = db_sess.query(Product).filter(Product.categories.title == category)
+        for d in data:
+            print(d.categories)
+        return render_template("product.html",
+                               products=data,
+                               categories=cat,
+                               title="Товары")
+
+@app.route("/comment_like/<int:id>", methods=['POST'])
+def comment_like(id):
+    db_sess = db_session.create_session()
+    data = db_sess.query(Comments).get(id)
+    data.likes += 1
+    result = data.likes
+    db_sess.commit()
+    return make_response(str(result))
+
 
 @app.route("/news/<int:id>", methods=['GET', 'POST'])
 def news_item(id):
@@ -144,6 +168,9 @@ def abort_if_news_not_found(news_id):
     if not news:
         abort(404, message=f"News {news_id} not found")
 
+@app.route('/img/<path:path>')
+def send_js(path):
+    return send_from_directory('uploads', path)
 
 from flask import make_response, jsonify
 
@@ -159,8 +186,8 @@ def main():
     db_sess = db_session.create_session()
     db_sess.add(News('Test', 'Text', '', 1))
     db_sess.commit()
-    db_sess.add(Product('Test', 'Text', 1))
-    db_sess.commit()
+    #db_sess.add(Product('Test', 'Text', 1))
+    #db_sess.commit()
     for user in db_sess.query(User).all():
         print(user)
     users = db_sess.query(User).filter(User.about.contains('пользоват'), User.id != 1, User.id % 2 != 0).all()
