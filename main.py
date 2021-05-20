@@ -182,20 +182,19 @@ def not_found(error):
 
 def main():
     db_session.global_init("db/comments.sqlite")
-
     db_sess = db_session.create_session()
-    db_sess.add(News('Test', 'Text', '', 1))
-    db_sess.commit()
-    #db_sess.add(Product('Test', 'Text', 1))
-    #db_sess.commit()
+    try:
+
+        admin = User('Admin', 'Admin', 'admin@mail.ru', 'admin')
+        admin.set_password('admin')
+        db_sess.add(admin)
+        db_sess.commit()
+    except:
+        db_sess.rollback()
+
     for user in db_sess.query(User).all():
         print(user)
-    users = db_sess.query(User).filter(User.about.contains('пользоват'), User.id != 1, User.id % 2 != 0).all()
 
-    for user in users:
-        print(user)
-
-    # app.register_blueprint(api.blueprint)
     app.run()
 
 
