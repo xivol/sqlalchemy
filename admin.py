@@ -49,14 +49,16 @@ def new_news_item():
 def edit_news_item(id):
     form = NewsForm()
     db_sess = db_session.create_session()
+    news = db_sess.query(News).get(id)
+    form.title.data = news.title
+    form.content.data = news.content
+    form.image.filename = news.image
     if form.validate_on_submit():
         filename = secure_filename(form.image.data.filename)
         form.image.data.save('uploads/'+filename)
-        news = db_sess.query(News).get(id)
         news.title = form.title.data,
         news.content = form.content.data,
         news.image = '/img/'+filename
-        news.user_id = current_user.id
         db_sess.commit()
         return redirect('/admin/news')
     return render_template('admin/news_item.html', title='Редактировать Новость', form=form)

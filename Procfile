@@ -1,1 +1,1 @@
-web: gunicorn  --workers=2 'wsgi:main()'
+web: gunicorn  --workers=1 'wsgi:main()'

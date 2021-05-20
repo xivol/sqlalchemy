@@ -27,7 +27,7 @@
         <p>
             {{ form.image.label }}<br>
             {%if form.image.filename %}
-                <img src="{{form.image.data.filename"/>
+                <img src="{{form.image.filename}}" style="max-width:50%;"/>
             {% endif %}
             {{ form.image(class="form-control", type="file") }}<br>
             {% for error in form.image.errors %}
