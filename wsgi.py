@@ -195,8 +195,8 @@ def main():
     for user in db_sess.query(User).all():
         print(user)
 
-    app.run()
+    return app
 
 
 if __name__ == '__main__':
-    main()
+    main().run()
