@@ -1,3 +1,6 @@
+import os
+
+from PIL import Image, ImageEnhance
 from flask import Flask, render_template, request, Blueprint, send_from_directory
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import abort
@@ -22,10 +25,6 @@ app.register_blueprint(admin)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# для списка объектов
-#api.add_resource(news_resource.NewsListResource, '/api/v2/news')
-# для одного объекта
-#api.add_resource(news_resource.NewsResource, '/api/v2/news/<int:news_id>')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -34,11 +33,22 @@ def load_user(user_id):
 
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
+def make_dark_img(img_name, factor):
+    im = Image.open('./uploads/' + img_name)
+    enhancer = ImageEnhance.Brightness(im)
+    im_output = enhancer.enhance(factor)
+    dark_im = ''.join(img_name.split('.')[:-1] + ['_featured', '.', img_name.split('.')[-1]])
+    im_output.save('./uploads/' + dark_im)
+    return dark_im
+
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
-    news = db_sess.query(News).filter(News.is_private != True)
-    return render_template("index.html", news=news, title="Записи в блоге")
+    news = list(db_sess.query(News))
+    for item in news:
+        item.feature_image = '/img/' + make_dark_img(os.path.split(item.image)[-1], 0.3)
+    products = db_sess.query(Product).filter(Product.is_featured == True)
+    return render_template("index.html", news=news, products=products, title="Добро пожаловать")
 
 @app.route("/news")
 def news():
@@ -182,6 +192,7 @@ def not_found(error):
 
 def main():
     db_session.global_init("db/comments.sqlite")
+    db_session.migrate(app)
     db_sess = db_session.create_session()
     try:
 

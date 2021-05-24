@@ -15,14 +15,16 @@ class Product(SqlAlchemyBase):
     photo_3 = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     descript = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     price = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
-    content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    is_featured = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)
     rating = sqlalchemy.Column(sqlalchemy.Float, default= 0, nullable=False)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
 
     categories = orm.relation("ProductCategories", back_populates="product")
 
-    def __init__(self, title, descr, price):
+    def __init__(self, title, descr, photo, price, is_featured):
         self.title = title
         self.descript = descr
+        self.photo_1 = photo
         self.price = price
+        self.is_featured = is_featured

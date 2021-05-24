@@ -4,8 +4,10 @@ from werkzeug.utils import redirect, secure_filename
 
 from data import db_session
 from data.news import News
+from data.product import Product
 from forms.delete_confirm import DeleteForm
 from forms.news import NewsForm
+from forms.product import ProductForm
 
 admin = Blueprint('admin', 'admin')
 
@@ -85,7 +87,29 @@ def delete_news_item(id):
 @admin_protect
 @login_required
 def get_products_list():
-    return "products_list_page"
+    db_sess = db_session.create_session()
+    data = db_sess.query(Product)
+    return render_template("admin/products.html", products=data, title="Управление Товарами")
+
+@admin.route('/admin/products_item/new',
+             endpoint='new_products_item', methods=['GET', 'POST'])
+@admin_protect
+@login_required
+def new_products_item():
+    form = ProductForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        filename = secure_filename(form.image.data.filename)
+        form.image.data.save('uploads/'+filename)
+        product = Product(form.title.data, form.content.data,
+                          '/img/'+filename, form.price.data,
+                          form.is_featured.data)
+        db_sess.add(product)
+        db_sess.commit()
+        return redirect(f"/admin/products")
+    return render_template('admin/products_item.html', title='Новый Товар', form=form)
+
+
 
 @admin.route('/admin/users',
              endpoint='get_users_list')
