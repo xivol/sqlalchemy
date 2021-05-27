@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Author</th>
+            <th scope="col">Created</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in comments %}
+        <tr>
+            <th scope="row">{{item.id}}</th>
+            <td>{{item.author_id}}</td>
+            <td>{{item.date}}</td>
+            <td>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

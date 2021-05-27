@@ -18,6 +18,7 @@ from forms.comment import CommentForm
 
 from forms.register import RegisterForm
 from forms.login import LoginForm
+import datetime
 
 app = Flask(__name__)
 app.register_blueprint(admin)
@@ -31,7 +32,9 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
+
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
 
 def make_dark_img(img_name, factor):
     im = Image.open('./uploads/' + img_name)
@@ -40,6 +43,7 @@ def make_dark_img(img_name, factor):
     dark_im = ''.join(img_name.split('.')[:-1] + ['_featured', '.', img_name.split('.')[-1]])
     im_output.save('./uploads/' + dark_im)
     return dark_im
+
 
 @app.route("/")
 def index():
@@ -50,11 +54,13 @@ def index():
     products = db_sess.query(Product).filter(Product.is_featured == True)
     return render_template("index.html", news=news, products=products, title="Добро пожаловать")
 
+
 @app.route("/news")
 def news():
     db_sess = db_session.create_session()
     data = db_sess.query(News)
     return render_template("news.html", news=data, title="Новости")
+
 
 @app.route('/products')
 def product():
@@ -75,6 +81,7 @@ def product():
                                products=data,
                                categories=cat,
                                title="Товары")
+
 
 @app.route("/comment_like/<int:id>", methods=['POST'])
 def comment_like(id):
@@ -97,6 +104,8 @@ def news_item(id):
             comm.table_name = News.__tablename__
             comm.author_id = current_user.id
             comm.text = form.text.data
+            comm.date = datetime.datetime.now()
+            comm.likes_count = 0
             db_sess.add(comm)
             db_sess.commit()
     else:
@@ -107,6 +116,7 @@ def news_item(id):
                                               Comments.table_name == News.__tablename__)
 
     return render_template("news_item.html", news=data, title=data.title, comments=comments, form=form)
+
 
 @app.route("/products/<int:id>", methods=['GET', 'POST'])
 def product_item(id):
@@ -123,6 +133,17 @@ def order():
     db_sess = db_session.create_session()
     data_orders = db_sess.query(Order)
     return render_template("order.html", news=data_orders, title="Заказы")
+
+
+@app.route("/comment_like/<int:id>", methods=['POST'])
+def add_like(id):
+    print('////')
+    db_sess = db_session.create_session()
+    comment = db_sess.query(Comments).get(id)
+    comment.likes_count += 1
+    db_sess.commit()
+
+    return make_response(str(comment.likes_count))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -178,9 +199,11 @@ def abort_if_news_not_found(news_id):
     if not news:
         abort(404, message=f"News {news_id} not found")
 
+
 @app.route('/img/<path:path>')
 def send_js(path):
     return send_from_directory('uploads', path)
+
 
 from flask import make_response, jsonify
 
