@@ -8,9 +8,9 @@
 
         <h1 class="my-4">Shop Name</h1>
         <div class="list-group">
-          <a href="#" class="list-group-item">Category 1</a>
-          <a href="#" class="list-group-item">Category 2</a>
-          <a href="#" class="list-group-item">Category 3</a>
+            {% for cat in categories %}
+          <a href="./products?category={{cat.id}}" class="list-group-item">{{cat.title}}</a>
+            {% endfor %}
         </div>
 
       </div>
@@ -18,18 +18,19 @@
 
       <div class="col-lg-9">
           <div class="row">
-              {% for item in news %}
+              {% for item in products %}
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <a href="./news/{{item.id}}"><img class="card-img-top" src="{{item.image}}" alt=""></a>
+              <a href="./products/{{item.id}}"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
               <div class="card-body">
                 <h4 class="card-title">
-                  <a href="./news/{{item.id}}">{{item.title}}</a>
+                  <a href="./products/{{item.id}}">{{item.title}}</a>
                 </h4>
-                <p class="card-text">{{item.content}}</p>
+                <h5>{{item.price}}</h5>
+                <p class="card-text">{{item.descript}}</p>
               </div>
               <div class="card-footer">
-                <small class="text-muted">{{item.created_date}}</small>
+                <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
               </div>
             </div>
           </div>

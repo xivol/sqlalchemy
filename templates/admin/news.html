@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <button type="button" class="btn btn-primary mb-3"
+            onclick="window.location ='/admin/news_item/new';">
+      New
+    </button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">Created</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for item in news %}
+        <tr>
+          <th scope="row">{{item.id}}</th>
+          <td>{{item.title}}</td>
+          <td>{{item.user.name}}</td>
+          <td>{{item.created_date}}</td>
+          <td><button type="button" class="btn btn-secondary ml-3"
+                      onclick="window.location ='/admin/news_item/{{item.id}}';">
+            Edit</button>
+              <button type="button"class="btn btn-danger ml-3"
+              onclick="window.location ='/admin/news_item/delete/{{item.id}}';">
+                Delete</button></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}

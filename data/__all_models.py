@@ -1,5 +1,6 @@
 from . import users
 from . import news
-from . import product
+from . import comments
+from . import order
 from . import categories
 from . import productCategories
