@@ -14,6 +14,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
+    role=sqlalchemy.Column(sqlalchemy.String, nullable=False, default='user')
+
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     about = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String,
@@ -25,10 +27,11 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     news = orm.relation("News", back_populates='user')
 
-    def __init__(self, name, about, email):
+    def __init__(self, name, about, email, role = 'user'):
         self.name = name
         self.about = about
         self.email = email
+        self.role = role
 
     def __repr__(self):
         return f'<User> {self.id} {self.name}'

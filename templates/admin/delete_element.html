@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col">
+    <h1 class="m-3">{{title}}</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+         {{ form.cancel(type="submit", class="btn btn-secondary m-2") }}
+         {{ form.confirm(type="submit", class="btn btn-danger m-2") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -25,10 +25,8 @@ class News(SqlAlchemyBase, SerializerMixin):
     news_img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user = orm.relation('User')
 
-
     def __init__(self, title, content, image, user_id):
         self.title = title
         self.content = content
         self.image = image
         self.user_id = user_id
-
