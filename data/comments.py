@@ -15,7 +15,12 @@ class Comments(SqlAlchemyBase):
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     connected_to_id = sqlalchemy.Column(sqlalchemy.Integer)
     table_name = sqlalchemy.Column(sqlalchemy.String)
-    likes_count = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    likes_count = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     empty = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
     author = orm.relation('User')
+
+
+
+    def date_str(self):
+        return self.date.strftime('%Y/%b/%d/%H/%M')

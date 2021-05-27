@@ -26,18 +26,14 @@
           </div>
         </div>
         <!-- /.card -->
+        {% include 'comments.html' %}
 
         <div class="card card-outline-secondary my-4">
           <div class="card-header">
             Product Reviews
           </div>
-
           <div class="card-body">
-              {% for item in comments%}
-            <p>{{item.text}}</p>
-            <small class="text-muted">Posted by {{item.author.name}} on {{item.date}}</small>
-            <hr>
-              {% endfor %}
+
 
               {% if form %}
                     <form action="" method="post">
