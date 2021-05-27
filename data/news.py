@@ -17,13 +17,12 @@ class News(SqlAlchemyBase, SerializerMixin):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     likes = sqlalchemy.Column(sqlalchemy.Integer)
-    is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
-
+    news_img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
-
-    news_img = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user = orm.relation('User')
+
+    is_featured = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False, default=False)
 
     def __init__(self, title, content, image, user_id):
         self.title = title
