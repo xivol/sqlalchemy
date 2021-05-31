@@ -1,4 +1,3 @@
-import flask_migrate
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
@@ -33,6 +32,3 @@ def global_init(db_file):
 def create_session() -> Session:
     global __factory
     return __factory()
-
-def migrate(app, engine = __engine):
-    __migrate = flask_migrate.Migrate(app ,engine)

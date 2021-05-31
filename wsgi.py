@@ -192,7 +192,6 @@ def not_found(error):
 
 def main():
     db_session.global_init("db/website.sqlite")
-    db_session.migrate(app)
     db_sess = db_session.create_session()
     try:
         admin = User('Admin', 'Admin', 'admin@mail.ru', 'admin')
