@@ -20,7 +20,5 @@ class Comments(SqlAlchemyBase):
     empty = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
     author = orm.relation('User')
 
-
-
     def date_str(self):
         return self.date.strftime('%Y/%b/%d/%H/%M')

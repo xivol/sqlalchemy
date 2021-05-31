@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, Blueprint, send_from_director
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import abort
 from werkzeug.utils import redirect
-
+import datetime
 from admin import admin
 from data import db_session
 from data.categories import Categories
@@ -31,7 +31,9 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
+
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
 
 def make_dark_img(img_name, factor):
     im = Image.open('./uploads/' + img_name)
@@ -52,11 +54,13 @@ def index():
     return render_template("index.html", news=news, products=products,
                            categories=cat, title="Добро пожаловать")
 
+
 @app.route("/news")
 def news():
     db_sess = db_session.create_session()
     data = db_sess.query(News)
     return render_template("news.html", news=data, title="Новости")
+
 
 @app.route('/products')
 def product():
@@ -82,8 +86,8 @@ def product():
 def comment_like(id):
     db_sess = db_session.create_session()
     data = db_sess.query(Comments).get(id)
-    data.likes += 1
-    result = data.likes
+    data.likes_count += 1
+    result = data.likes_count
     db_sess.commit()
     return make_response(str(result))
 
@@ -99,6 +103,8 @@ def news_item(id):
             comm.table_name = News.__tablename__
             comm.author_id = current_user.id
             comm.text = form.text.data
+            comm.date = datetime.datetime.now()
+            comm.likes_count = 0
             db_sess.add(comm)
             db_sess.commit()
     else:
@@ -109,6 +115,7 @@ def news_item(id):
                                               Comments.table_name == News.__tablename__)
 
     return render_template("news_item.html", news=data, title=data.title, comments=comments, form=form)
+
 
 @app.route("/products/<int:id>", methods=['GET', 'POST'])
 def product_item(id):
@@ -150,6 +157,17 @@ def reqister():
         db_sess.commit()
         return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route("/comment_like/<int:id>", methods=['POST'])
+def add_like(id):
+    print('////')
+    db_sess = db_session.create_session()
+    comment = db_sess.query(Comments).get(id)
+    comment.likes_count += 1
+    db_sess.commit()
+
+    return make_response(str(comment.likes_count))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -201,6 +219,7 @@ def main():
     db_session.global_init("db/website.sqlite")
     db_sess = db_session.create_session()
     try:
+
         admin = User('Admin', 'Admin', 'admin@mail.ru', 'admin')
         admin.set_password('admin')
         db_sess.add(admin)
