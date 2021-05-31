@@ -3,8 +3,10 @@ from flask_login import login_required, current_user
 from werkzeug.utils import redirect, secure_filename
 
 from data import db_session
+from data.categories import Categories
 from data.news import News
 from data.product import Product
+from forms.categories import CategoriesForm
 from forms.delete_confirm import DeleteForm
 from forms.news import NewsForm
 from forms.product import ProductForm
@@ -112,6 +114,27 @@ def new_products_item():
         return redirect(f"/admin/products")
     return render_template('admin/products_item.html', title='Новый Товар', form=form)
 
+@admin.route('/admin/categories', endpoint='get_categories_list')
+@admin_protect
+@login_required
+def get_categories_list():
+    db_sess = db_session.create_session()
+    data = db_sess.query(Categories)
+    return render_template("admin/categories.html", categories=data, title="Управление Категориями")
+
+@admin.route('/admin/categories_item/new',
+             endpoint='new_categories_item', methods=['GET', 'POST'])
+@admin_protect
+@login_required
+def new_categories_item():
+    form = CategoriesForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        category = Categories(form.title.data, form.content.data)
+        db_sess.add(category)
+        db_sess.commit()
+        return redirect(f"/admin/categories")
+    return render_template('admin/categories_item.html', title='Новая Категория', form=form)
 
 
 @admin.route('/admin/users',

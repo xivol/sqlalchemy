@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <button type="button" class="btn btn-primary mb-3"
+            onclick="window.location ='/admin/categories_item/new';">
+      New
+    </button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Title</th>
+          <th scope="col">Description</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for item in categories %}
+        <tr>
+          <th scope="row">{{item.id}}</th>
+          <td>{{item.title}}</td>
+          <td>{{item.content}}</td>
+          <td><button type="button" class="btn btn-secondary ml-3"
+                      onclick="window.location ='/admin/categories_item/{{item.id}}';">
+            Edit</button>
+              <button type="button"class="btn btn-danger ml-3"
+              onclick="window.location ='/admin/categories_item/delete/{{item.id}}';">
+                Delete</button></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}
