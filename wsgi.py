@@ -191,6 +191,10 @@ def not_found(error):
 
 
 def main():
+    if not os.path.exists("db"):
+        os.makedirs("db")
+    if not os.path.exists("uploads"):
+        os.makedirs("uploads")
     db_session.global_init("db/website.sqlite")
     db_sess = db_session.create_session()
     try:
