@@ -59,7 +59,9 @@ def index():
 def news():
     db_sess = db_session.create_session()
     data = db_sess.query(News)
-    return render_template("news.html", news=data, title="Новости")
+    cat = db_sess.query(Categories)
+    return render_template("news.html", news=data,
+                           categories=cat, title="Новости")
 
 
 @app.route('/products')

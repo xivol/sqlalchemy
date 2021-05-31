@@ -110,9 +110,9 @@ def get_products_list():
 @admin_protect
 @login_required
 def new_products_item():
-    form = ProductForm()
+    db_sess = db_session.create_session()
+    form = ProductForm(db_sess)
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
         filename = secure_filename(form.image.data.filename)
         form.image.data.save('uploads/' + filename)
         product = Product(form.title.data, form.content.data,
