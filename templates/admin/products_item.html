@@ -24,7 +24,7 @@
                 </div>
             {% endfor %}
         </p>
-                <p>
+        <p>
             {{ form.price.label }}<br>
             {{ form.price(class="form-control", type="input") }}<br>
             {% for error in form.price.errors %}
@@ -44,6 +44,10 @@
                 </div>
             {% endfor %}
         </div>
+        <p>
+            {{ form.categories.label }}<br>
+            {{ form.categories(class="form-control", type="select") }}<br>
+        </p>
         <p>
             {{ form.image.label }}<br>
             {%if form.image.filename %}

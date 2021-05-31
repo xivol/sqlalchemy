@@ -11,3 +11,7 @@ class Categories(SqlAlchemyBase):
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     products = orm.relation("ProductCategories", back_populates="category")
+
+    def __init__(self, title, content):
+        self.title = title
+        self.content = content

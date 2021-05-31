@@ -4,11 +4,7 @@ from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 
 
-class ProductForm(FlaskForm):
+class CategoriesForm(FlaskForm):
     title = StringField('Название')
     content = TextAreaField('Описание')
-    price = FloatField('Цена')
-    image = FileField('Изображение')
-    is_featured = BooleanField('Показать на Главной')
-    categories = FieldList(True, 'Категории')
     submit = SubmitField('Отправить')

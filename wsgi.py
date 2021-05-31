@@ -48,7 +48,9 @@ def index():
     for item in news:
         item.feature_image = '/img/' + make_dark_img(os.path.split(item.image)[-1], 0.3)
     products = db_sess.query(Product).filter(Product.is_featured == True)
-    return render_template("index.html", news=news, products=products, title="Добро пожаловать")
+    cat = db_sess.query(Categories)
+    return render_template("index.html", news=news, products=products,
+                           categories=cat, title="Добро пожаловать")
 
 @app.route("/news")
 def news():
@@ -195,6 +197,7 @@ def main():
         os.makedirs("db")
     if not os.path.exists("uploads"):
         os.makedirs("uploads")
+
     db_session.global_init("db/website.sqlite")
     db_sess = db_session.create_session()
     try:
