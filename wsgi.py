@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, Blueprint, send_from_director
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_restful import abort
 from werkzeug.utils import redirect
-
+import datetime
 from admin import admin
 from data import db_session
 from data.categories import Categories
@@ -18,7 +18,6 @@ from forms.comment import CommentForm
 
 from forms.register import RegisterForm
 from forms.login import LoginForm
-import datetime
 
 app = Flask(__name__)
 app.register_blueprint(admin)
@@ -87,8 +86,8 @@ def product():
 def comment_like(id):
     db_sess = db_session.create_session()
     data = db_sess.query(Comments).get(id)
-    data.likes += 1
-    result = data.likes
+    data.likes_count += 1
+    result = data.likes_count
     db_sess.commit()
     return make_response(str(result))
 
@@ -135,17 +134,6 @@ def order():
     return render_template("order.html", news=data_orders, title="Заказы")
 
 
-@app.route("/comment_like/<int:id>", methods=['POST'])
-def add_like(id):
-    print('////')
-    db_sess = db_session.create_session()
-    comment = db_sess.query(Comments).get(id)
-    comment.likes_count += 1
-    db_sess.commit()
-
-    return make_response(str(comment.likes_count))
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
     form = RegisterForm()
@@ -169,6 +157,17 @@ def reqister():
         db_sess.commit()
         return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route("/comment_like/<int:id>", methods=['POST'])
+def add_like(id):
+    print('////')
+    db_sess = db_session.create_session()
+    comment = db_sess.query(Comments).get(id)
+    comment.likes_count += 1
+    db_sess.commit()
+
+    return make_response(str(comment.likes_count))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -214,11 +213,10 @@ def not_found(error):
 
 
 def main():
-    db_session.global_init("db/comments.sqlite")
+    db_session.global_init("db/website.sqlite")
     db_session.migrate(app)
     db_sess = db_session.create_session()
     try:
-
         admin = User('Admin', 'Admin', 'admin@mail.ru', 'admin')
         admin.set_password('admin')
         db_sess.add(admin)

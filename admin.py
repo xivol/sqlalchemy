@@ -8,8 +8,8 @@ from data.comments import Comments
 from data.product import Product
 from forms.delete_confirm import DeleteForm
 from forms.news import NewsForm
-from forms.product import ProductForm
 from forms.comment import CommentForm
+from forms.product import ProductForm
 
 admin = Blueprint('admin', 'admin')
 
@@ -58,17 +58,20 @@ def edit_news_item(id):
     form = NewsForm()
     db_sess = db_session.create_session()
     news = db_sess.query(News).get(id)
-    form.title.data = news.title
-    form.content.data = news.content
-    form.image.filename = news.image
+
     if form.validate_on_submit():
         filename = secure_filename(form.image.data.filename)
-        form.image.data.save('uploads/' + filename)
-        news.title = form.title.data,
-        news.content = form.content.data,
-        news.image = '/img/' + filename
+        if filename != '' and news.image != '/img/' + filename:
+            form.image.data.save('uploads/' + filename)
+            news.image = '/img/' + filename
+        news.title = form.title.data
+        news.content = form.content.data
         db_sess.commit()
         return redirect('/admin/news')
+    else:
+        form.title.data = news.title
+        form.content.data = news.content
+        form.image.filename = news.image
     return render_template('admin/news_item.html', title='Редактировать Новость', form=form)
 
 
@@ -129,19 +132,28 @@ def get_users_list():
 
 # Comments
 
-@admin.route('/admin/comments',
-             endpoint='delete_comment_item', methods=['GET', 'POST'])
+@admin.route('/admin/comments', endpoint='get_comments_list')
 @admin_protect
 @login_required
-def delete_comment_item():
+def get_comments_list():
     db_sess = db_session.create_session()
     data = db_sess.query(Comments)
     return render_template("admin/comments.html", comments=data, title="Управление Комментариями")
 
 
-@admin.route('/admin/news/<int:id>/comments',
-             endpoint='get_comments', methods=['GET', 'POST'])
+@admin.route('/admin/comment_item/delete/<int:id>',
+             endpoint='delete_comment_item', methods=['GET', 'POST'])
 @admin_protect
 @login_required
-def get_comments():
-    return 'comments_list'
+def delete_comment_item(id):
+    form = DeleteForm()
+    if not form.validate_on_submit():
+        form.id.data = id
+        return render_template('admin/delete_element.html', title='Удалить Комментарий', form=form)
+    elif form.confirm.data == True:
+        del_id = form.id.data
+        db_sess = db_session.create_session()
+        comment = db_sess.query(Comments).get(id)
+        db_sess.delete(comment)
+        db_sess.commit()
+    return redirect('/admin/comments')

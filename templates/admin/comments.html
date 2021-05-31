@@ -2,27 +2,29 @@
 
 {% block content %}
 <div class="row">
-
     <table class="table">
-        <thead>
+      <thead>
         <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Author</th>
-            <th scope="col">Created</th>
-            <th scope="col"></th>
+          <th scope="col">ID</th>
+          <th scope="col">Author</th>
+          <th scope="col">Text</th>
+          <th scope="col">Created</th>
+          <th scope="col"></th>
         </tr>
-        </thead>
-        <tbody>
-        {% for item in comments %}
+      </thead>
+      <tbody>
+      {% for item in comments %}
         <tr>
-            <th scope="row">{{item.id}}</th>
-            <td>{{item.author_id}}</td>
-            <td>{{item.date}}</td>
-            <td>
-            </td>
+          <th scope="row">{{item.id}}</th>
+          <td>{{item.author}}</td>
+          <td>{{item.text}}</td>
+          <td>{{item.date}}</td>
+          <td> <button type="button"class="btn btn-danger ml-3"
+              onclick="window.location ='/admin/comment_item/delete/{{item.id}}';">
+                Delete</button></td>
         </tr>
-        {% endfor %}
-        </tbody>
+      {% endfor %}
+      </tbody>
     </table>
 </div>
 {% endblock %}

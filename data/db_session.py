@@ -35,4 +35,4 @@ def create_session() -> Session:
     return __factory()
 
 def migrate(app, engine = __engine):
-    __migrate = flask_migrate.Migrate(app,engine)
+    __migrate = flask_migrate.Migrate(app ,engine)
